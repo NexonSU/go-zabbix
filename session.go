@@ -3,14 +3,13 @@ package zabbix
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 // ErrNotFound describes an empty result set for an API call.
-var ErrNotFound = errors.New("No results were found matching the given search parameters")
+var ErrNotFound = &NotFoundError{"No results were found matching the given search parameters"}
 
 // A Session is an authenticated Zabbix JSON-RPC API client. It must be
 // initialized and connected with NewSession.
