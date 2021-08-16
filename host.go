@@ -96,6 +96,9 @@ type Host struct {
 	TLSSubject     string `json:"tls_subject"`
 	TLSPSKIdentity string `json:"tls_psk_identity"`
 	TLSPSK         string `json:"tls_psk"`
+
+	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
+	Inventory map[string]string `json:"inventory,omitempty"`
 }
 
 // HostGetParams represent the parameters for a `host.get` API call.
