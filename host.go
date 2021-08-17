@@ -99,6 +99,9 @@ type Host struct {
 
 	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
 	Inventory map[string]string `json:"inventory,omitempty"`
+
+	// Interfqace of host. Is filled where SelectInterfaces is used on HostGetParams
+	Interfaces []HostInterface `json:"interfaces,omitempty"`
 }
 
 // HostGetParams represent the parameters for a `host.get` API call.

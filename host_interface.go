@@ -89,3 +89,15 @@ func (c *Session) GetHostInterfaces(params HostInterfaceGetParams) ([]HostInterf
 
 	return hostInterfaces, nil
 }
+
+func (c *Session) UpdateHostInterface(inter HostInterface) ([]string, error) {
+	returnInterface := struct {
+		InterfaceIDS []string `json:"interfaceids"`
+	}{}
+	err := c.Get("hostinterface.update", inter, &returnInterface)
+	if err != nil {
+		return []string{}, err
+	}
+
+	return returnInterface.InterfaceIDS, nil
+}

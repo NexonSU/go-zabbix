@@ -1,6 +1,7 @@
 package zabbix
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -17,4 +18,12 @@ func (bit *ZBXBoolean) UnmarshalJSON(data []byte) error {
 		return errors.New(fmt.Sprintf("Boolean unmarshal error: invalid input %s", asString))
 	}
 	return nil
+}
+
+func (bit ZBXBoolean) MarshalJSON() ([]byte, error) {
+	if bit == true {
+		return json.Marshal("1")
+	}
+
+	return json.Marshal("0")
 }
