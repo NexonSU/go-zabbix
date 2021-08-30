@@ -1,5 +1,7 @@
 package zabbix
 
+import "strconv"
+
 const (
 	// HostSourceDefault indicates that a Host was created in the normal way.
 	HostSourceDefault = 0
@@ -209,4 +211,27 @@ func (c *Session) GetHosts(params HostGetParams) ([]Host, error) {
 	}
 
 	return hosts, nil
+}
+
+func (c *Session) CountHosts(params HostGetParams) (int, error) {
+	params.GetParameters.CountOutput = true
+
+	req := NewRequest("host.get", &params)
+	resp, err := c.Do(req)
+	if err != nil {
+		return 0, err
+	}
+
+	var result string
+	err = resp.Bind(&result)
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := strconv.ParseInt(result, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }
