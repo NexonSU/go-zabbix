@@ -1,7 +1,5 @@
 package zabbix
 
-import "time"
-
 const (
 	// HostInterfaceAvailabilityUnknown Unknown availability of host, never has come online
 	HostInterfaceAvailabilityUnknown = 0
@@ -40,7 +38,7 @@ type HostInterface struct {
 	Error string `json:"error,omitempty"`
 
 	// (readonly) Time when host interface became unavailable.
-	ErrorFrom time.Time `json:"error_from,omitempty"`
+	ErrorsFrom *UnixTimestamp `json:"errors_from,string,omitempty"`
 
 	// ID of the host the interface belongs to.
 	HostID string `json:"hostid"`
