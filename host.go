@@ -69,6 +69,9 @@ type Host struct {
 	MaintenanceType   string `json:"maintenance_type"`
 	MaintenanceFrom   string `json:"maintenance_from"`
 
+	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
+	Inventory map[string]string `json:"inventory,omitempty"`
+
 	// Status of the host
 	Status int `json:"status,string"`
 
