@@ -1,5 +1,7 @@
 package zabbix
 
+import "strconv"
+
 const (
 	// HostSourceDefault indicates that a Host was created in the normal way.
 	HostSourceDefault = 0
@@ -69,9 +71,6 @@ type Host struct {
 	MaintenanceType   string `json:"maintenance_type"`
 	MaintenanceFrom   string `json:"maintenance_from"`
 
-	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
-	Inventory map[string]string `json:"inventory,omitempty"`
-
 	// Status of the host
 	Status int `json:"status,string"`
 
@@ -84,7 +83,7 @@ type Host struct {
 	Description string `json:"description"`
 
 	// Inventory mode
-	InventoryMode int `json:"inventory_mode"`
+	InventoryMode int `json:"inventory_mode,string"`
 
 	// HostID of the proxy managing this host
 	ProxyHostID string `json:"proxy_hostid"`
@@ -99,6 +98,12 @@ type Host struct {
 	TLSSubject     string `json:"tls_subject"`
 	TLSPSKIdentity string `json:"tls_psk_identity"`
 	TLSPSK         string `json:"tls_psk"`
+
+	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
+	Inventory map[string]string `json:"inventory,omitempty"`
+
+	// Interfqace of host. Is filled where SelectInterfaces is used on HostGetParams
+	Interfaces []HostInterface `json:"interfaces,omitempty"`
 }
 
 // HostGetParams represent the parameters for a `host.get` API call.
@@ -206,4 +211,27 @@ func (c *Session) GetHosts(params HostGetParams) ([]Host, error) {
 	}
 
 	return hosts, nil
+}
+
+func (c *Session) CountHosts(params HostGetParams) (int, error) {
+	params.GetParameters.CountOutput = true
+
+	req := NewRequest("host.get", &params)
+	resp, err := c.Do(req)
+	if err != nil {
+		return 0, err
+	}
+
+	var result string
+	err = resp.Bind(&result)
+	if err != nil {
+		return 0, err
+	}
+
+	count, err := strconv.ParseInt(result, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return int(count), nil
 }
