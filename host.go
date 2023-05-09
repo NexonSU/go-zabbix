@@ -1,7 +1,5 @@
 package zabbix
 
-import "strconv"
-
 const (
 	// HostSourceDefault indicates that a Host was created in the normal way.
 	HostSourceDefault = 0
