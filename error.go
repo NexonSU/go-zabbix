@@ -20,3 +20,11 @@ type APIError struct {
 func (e *APIError) Error() string {
 	return fmt.Sprintf("%s (%d)", e.Message, e.Code)
 }
+
+type NotFoundError struct {
+	Message string
+}
+
+func (e *NotFoundError) Error() string {
+	return fmt.Sprintf("%s", e.Message)
+}
