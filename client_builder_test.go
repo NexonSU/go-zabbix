@@ -5,9 +5,9 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/cavaliercoder/go-zabbix"
-	"github.com/cavaliercoder/go-zabbix/test"
-	"github.com/cavaliercoder/go-zabbix/types"
+	"github.com/fabiang/go-zabbix"
+	"github.com/fabiang/go-zabbix/test"
+	"github.com/fabiang/go-zabbix/types"
 )
 
 const (

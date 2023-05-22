@@ -3,7 +3,7 @@ package zabbix
 import (
 	"time"
 
-	"github.com/cavaliercoder/go-zabbix/types"
+	"github.com/fabiang/go-zabbix/types"
 )
 
 const (

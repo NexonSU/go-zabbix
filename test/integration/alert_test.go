@@ -3,8 +3,8 @@ package integration
 import (
 	"testing"
 
-	"github.com/cavaliercoder/go-zabbix"
-	"github.com/cavaliercoder/go-zabbix/test"
+	"github.com/fabiang/go-zabbix"
+	"github.com/fabiang/go-zabbix/test"
 )
 
 func TestAlerts(t *testing.T) {

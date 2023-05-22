@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/cavaliercoder/go-zabbix/types"
+	"github.com/fabiang/go-zabbix/types"
 )
 
 const (

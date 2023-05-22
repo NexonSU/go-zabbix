@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/cavaliercoder/go-zabbix/types"
+	"github.com/fabiang/go-zabbix/types"
 )
 
 type MaintenanceType int

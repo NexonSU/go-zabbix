@@ -1,6 +1,6 @@
 package zabbix
 
-import "github.com/cavaliercoder/go-zabbix/types"
+import "github.com/fabiang/go-zabbix/types"
 
 const (
 	// HostInterfaceAvailabilityUnknown Unknown availability of host, never has come online

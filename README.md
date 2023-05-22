@@ -2,9 +2,9 @@
 
 Go bindings for the Zabbix API
 
-[![go report card](https://goreportcard.com/badge/github.com/cavaliercoder/go-zabbix "go report card")](https://goreportcard.com/report/github.com/cavaliercoder/go-zabbix)
+[![go report card](https://goreportcard.com/badge/github.com/fabiang/go-zabbix "go report card")](https://goreportcard.com/report/github.com/fabiang/go-zabbix)
 [![GPL license](https://img.shields.io/badge/license-GPL-brightgreen.svg)](https://opensource.org/licenses/gpl-license)
-[![GoDoc](https://godoc.org/github.com/cavaliercoder/go-zabbix?status.svg)](https://godoc.org/github.com/cavaliercoder/go-zabbix)
+[![GoDoc](https://godoc.org/github.com/fabiang/go-zabbix?status.svg)](https://godoc.org/github.com/fabiang/go-zabbix)
 
 ## Overview
 
@@ -17,9 +17,15 @@ stable, fast, and allows for loose typing (using types such as`interface{}` or
 `map[string]interface{}`) as well as strong types (such as `Host` or `Event`).
 
 The package aims to have comprehensive coverage of Zabbix API methods from v1.8
-through to v3.0 without introducing limitations to the native API methods.
+through to v7.0 without introducing limitations to the native API methods.
 
 ## Getting started
+
+Get the package:
+
+```
+go get "github.com/fabiang/go-zabbix"
+```
 
 ```go
 package main
@@ -30,7 +36,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/cavaliercoder/go-zabbix"
+	"github.com/fabiang/go-zabbix"
 )
 
 func main() {
@@ -47,12 +53,16 @@ func main() {
 	}
 
 	fmt.Printf("Connected to Zabbix API v%s", version)
+}
+```
 
-	// Use session builder with caching.
-	// You can use own cache by implementing SessionAbstractCache interface
-	// Optionally an http.Client can be passed to the builder, allowing to skip TLS verification,
-	// pass proxy settings, etc.
+### Use session builder with caching.
 
+You can use own cache by implementing SessionAbstractCache interface.
+Optionally an http.Client can be passed to the builder, allowing to skip TLS verification, pass proxy settings, etc.
+
+```go
+func main() {
 	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
@@ -83,4 +93,4 @@ func main() {
 
 ## License
 
-Released under the [GNU GPL License](https://github.com/cavaliercoder/go-zabbix/blob/master/LICENSE)
+Released under the [GNU GPL License](https://github.com/fabiang/go-zabbix/blob/master/LICENSE)

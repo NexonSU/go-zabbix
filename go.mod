@@ -1,5 +1,5 @@
-module github.com/cavaliercoder/go-zabbix
+module github.com/fabiang/go-zabbix
 
-go 1.16
+go 1.19
 
 require github.com/hashicorp/go-version v1.6.0

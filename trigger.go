@@ -1,7 +1,7 @@
 package zabbix
 
 import (
-	"github.com/cavaliercoder/go-zabbix/types"
+	"github.com/fabiang/go-zabbix/types"
 )
 
 const (
