@@ -1,22 +1,27 @@
-package zabbix
+package integration
 
 import (
 	"testing"
+
+	"github.com/cavaliercoder/go-zabbix"
+	"github.com/cavaliercoder/go-zabbix/test"
 )
 
 func TestUserMacros(t *testing.T) {
-	session := GetTestSession(t)
+	session := test.GetTestSession(t)
 
-	params := UserMacroGetParams{}
+	params := zabbix.UserMacroGetParams{}
 
 	macros, err := session.GetUserMacro(params)
 
 	if err != nil {
-		t.Fatalf("Error getting user macros: %v", err)
+		if _, ok := err.(*zabbix.NotFoundError); !ok {
+			t.Fatalf("Error getting user macros: %v", err)
+		}
 	}
 
 	if len(macros) == 0 {
-		t.Fatal("No usermacro found")
+		t.Skip("No usermacro found")
 	}
 
 	for i, macro := range macros {

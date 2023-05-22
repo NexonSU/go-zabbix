@@ -2,9 +2,9 @@ package zabbix
 
 import (
 	"errors"
-	"fmt"
 	"strings"
-	"time"
+
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 type MaintenanceType int
@@ -26,15 +26,13 @@ const (
 )
 
 type Maintenance struct {
-	MaintenanceID string
-	Name          string
-	ActiveSince   time.Time
-	ActiveTill    time.Time
-	Description   string
-	// Service period in hours
-	ServicePeriod       int
-	Type                MaintenanceType
-	ActionEvalTypeAndOr TagsEvaltype
+	MaintenanceID       string                 `json:"maintenanceid"`
+	Name                string                 `json:"name"`
+	ActiveSince         types.ZBXUnixTimestamp `json:"active_since,string"`
+	ActiveTill          types.ZBXUnixTimestamp `json:"active_till,string"`
+	Description         string                 `json:"description"`
+	Type                MaintenanceType        `json:"tags_evaltype,string"`
+	ActionEvalTypeAndOr TagsEvaltype           `json:"maintenance_type,string"`
 }
 
 type MaintenanceGetParams struct {
@@ -64,14 +62,22 @@ type MaintenanceGetParams struct {
 }
 
 type MaintenanceCreateParams struct {
-	JMaintenance
+	Maintenance
 
 	Groupids []string `json:"groupids,omitempty"`
 	// Hosts name
-	HostNames   []string      `json:"-"`
-	HostIDs     []string      `json:"hostids"`
-	Timeperiods []Timeperiods `json:"timeperiods"`
-	Tags        []string      `json:"tags,omitempty"`
+	HostNames   []string                 `json:"-"`
+	HostIDs     []string                 `json:"hostids"`
+	Timeperiods []MaintenanceTimeperiods `json:"timeperiods"`
+	Tags        []string                 `json:"tags,omitempty"`
+}
+
+type MaintenanceTimeperiods struct {
+	TimeperiodType int `json:"timeperiod_type,int"`
+	Every          int `json:"every,string"`
+	Dayofweek      int `json:"dayofweek,string"`
+	StartTime      int `json:"start_time,string"`
+	Period         int `json:"period,string"`
 }
 
 type MaintenanceCreateResponse struct {
@@ -81,27 +87,17 @@ type MaintenanceCreateResponse struct {
 // GetMaintenance queries the Zabbix API for Maintenance matching the given search
 // parameters.
 func (s *Session) GetMaintenance(params *MaintenanceGetParams) ([]Maintenance, error) {
-	jmaintenance := make([]JMaintenance, 0)
-	err := s.Get("maintenance.get", params, &jmaintenance)
+	maintenance := make([]Maintenance, 0)
+	err := s.Get("maintenance.get", params, &maintenance)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(jmaintenance) == 0 {
+	if len(maintenance) == 0 {
 		return nil, ErrNotFound
 	}
 
-	out := make([]Maintenance, len(jmaintenance))
-	for i, jaction := range jmaintenance {
-		maintenance, err := jaction.Maintenance()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Maintenance %d in response: %v", i, err)
-		}
-
-		out[i] = *maintenance
-	}
-
-	return out, nil
+	return maintenance, nil
 }
 
 func (s *Session) CreateMaintenance(params *MaintenanceCreateParams) (response MaintenanceCreateResponse, err error) {
@@ -140,16 +136,4 @@ func (m *MaintenanceCreateParams) FillHostIDs(session *Session) error {
 	}
 
 	return err
-}
-
-func (c *MaintenanceCreateParams) FillFields(Object *Maintenance) *MaintenanceCreateParams {
-	c.ActiveSince = Object.ActiveSince.Unix()
-	c.ActiveTill = Object.ActiveSince.Add(time.Hour * time.Duration(Object.ServicePeriod)).Unix()
-	c.Description = Object.Description
-	c.MaintenanceID = Object.MaintenanceID
-	c.Name = Object.Name
-	c.TagsEvaltype = int(Object.Type)
-	c.MaintenanceType = int(Object.ActionEvalTypeAndOr)
-
-	return c
 }

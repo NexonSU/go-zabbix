@@ -1,16 +1,25 @@
-package zabbix
+package zabbix_test
 
 import (
 	"fmt"
 	"io/ioutil"
 	"testing"
+
+	"github.com/cavaliercoder/go-zabbix"
+	"github.com/cavaliercoder/go-zabbix/test"
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 const (
-	fakeURL        = "http://localhost/api_jsonrpc.php"
-	fakeToken      = "0424bd59b807674191e7d77572075f33"
-	fakeAPIVersion = "2.0"
+	fakeURL   = "http://localhost/api_jsonrpc.php"
+	fakeToken = "0424bd59b807674191e7d77572075f33"
 )
+
+var fakeAPIVersion *types.ZBXVersion
+
+func init() {
+	fakeAPIVersion, _ = types.NewZBXVersion("2.0")
+}
 
 func prepareTemporaryDir(t *testing.T) (dir string, success bool) {
 	tempDir, err := ioutil.TempDir("", "zabbix-session-test")
@@ -25,14 +34,14 @@ func prepareTemporaryDir(t *testing.T) (dir string, success bool) {
 	return tempDir, true
 }
 
-func getTestFileCache(baseDir string) SessionAbstractCache {
+func getTestFileCache(baseDir string) zabbix.SessionAbstractCache {
 	sessionFilePath := baseDir + "/" + ".zabbix_session"
-	return NewSessionFileCache().SetFilePath(sessionFilePath)
+	return zabbix.NewSessionFileCache().SetFilePath(sessionFilePath)
 }
 
 func TestSessionCache(t *testing.T) {
 	// Create a fake session for r/w test
-	fakeSession := &Session{
+	fakeSession := &zabbix.Session{
 		URL:        fakeURL,
 		Token:      fakeToken,
 		APIVersion: fakeAPIVersion,
@@ -76,7 +85,7 @@ func TestSessionCache(t *testing.T) {
 	}
 }
 
-func compareSessionWithMock(session *Session) error {
+func compareSessionWithMock(session *zabbix.Session) error {
 	if session.URL != fakeURL {
 		return fmt.Errorf("Session URL '%s' is not equal to '%s'", session.URL, fakeURL)
 	}
@@ -85,16 +94,19 @@ func compareSessionWithMock(session *Session) error {
 		return fmt.Errorf("Session token '%s' is not equal to '%s'", session.Token, fakeToken)
 	}
 
-	if session.APIVersion != fakeAPIVersion {
-		return fmt.Errorf("Session version '%s' is not equal to '%s'", session.APIVersion, fakeAPIVersion)
+	if session.APIVersion.String() != fakeAPIVersion.String() {
+		return fmt.Errorf(
+			"Session version %q is not equal to %q",
+			session.APIVersion.String(),
+			fakeAPIVersion.String())
 	}
 
 	return nil
 }
 
 // should started by TestSessionCache
-func testClientBuilder(t *testing.T, cache SessionAbstractCache) {
-	username, password, url := GetTestCredentials()
+func testClientBuilder(t *testing.T, cache zabbix.SessionAbstractCache) {
+	username, password, url := test.GetTestCredentials()
 
 	if !cache.HasSession() {
 		t.Errorf("ManualTestClientBuilder test requires a cached session, run TestSessionCache before running this test case")
@@ -102,7 +114,7 @@ func testClientBuilder(t *testing.T, cache SessionAbstractCache) {
 	}
 
 	// Try to build a session using the session builder
-	client, err := CreateClient(url).WithCache(cache).WithCredentials(username, password).Connect()
+	client, err := zabbix.CreateClient(url).WithCache(cache).WithCredentials(username, password).Connect()
 
 	if err != nil {
 		t.Errorf("failed to create a session using cache - %s", err)

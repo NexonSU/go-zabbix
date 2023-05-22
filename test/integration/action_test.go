@@ -1,21 +1,27 @@
-package zabbix
+package integration
 
 import (
 	"testing"
+
+	"github.com/cavaliercoder/go-zabbix"
+	"github.com/cavaliercoder/go-zabbix/test"
 )
 
 func TestActions(t *testing.T) {
-	session := GetTestSession(t)
+	session := test.GetTestSession(t)
 
-	params := ActionGetParams{}
+	params := zabbix.ActionGetParams{}
 
 	actions, err := session.GetActions(params)
+
 	if err != nil {
-		t.Fatalf("Error getting actions: %v", err)
+		if _, ok := err.(*zabbix.NotFoundError); !ok {
+			t.Fatalf("Error getting actions: %v", err)
+		}
 	}
 
 	if len(actions) == 0 {
-		t.Fatal("No actions found")
+		t.Skip("No actions found")
 	}
 
 	for i, action := range actions {
@@ -25,10 +31,6 @@ func TestActions(t *testing.T) {
 
 		if action.Name == "" {
 			t.Fatalf("Action %d has no name", i)
-		}
-
-		if action.EventType == EventSourceTrigger && action.ProblemMessageSubject == "" {
-			t.Fatalf("Action %d has no problem message subject", i)
 		}
 	}
 

@@ -6,10 +6,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 // ErrNotFound describes an empty result set for an API call.
-var ErrNotFound = &NotFoundError{"No results were found matching the given search parameters"}
+var (
+	ErrNotFound      = &NotFoundError{"No results were found matching the given search parameters"}
+	zabbixVersion600 *types.ZBXVersion
+)
+
+func init() {
+	zabbixVersion600, _ = types.NewZBXVersion("6.0.0")
+}
 
 // A Session is an authenticated Zabbix JSON-RPC API client. It must be
 // initialized and connected with NewSession.
@@ -22,7 +31,7 @@ type Session struct {
 	Token string `json:"token"`
 
 	// ApiVersion is the software version string of the connected Zabbix API.
-	APIVersion string `json:"apiVersion"`
+	APIVersion *types.ZBXVersion `json:"apiVersion"`
 
 	client *http.Client
 }
@@ -44,15 +53,21 @@ func NewSession(url string, username string, password string) (session *Session,
 
 func (c *Session) login(username, password string) error {
 	// get Zabbix API version
-	_, err := c.GetVersion()
+	ver, err := c.GetVersion()
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve Zabbix API version: %v", err)
 	}
 
 	// login to API
 	params := map[string]string{
-		"user":     username,
 		"password": password,
+	}
+
+	// user param was renamed in 6.0 and removed in 6.4
+	if ver.Compare(zabbixVersion600) < 0 {
+		params["user"] = username
+	} else {
+		params["username"] = username
 	}
 
 	res, err := c.Do(NewRequest("user.login", params))
@@ -69,19 +84,20 @@ func (c *Session) login(username, password string) error {
 }
 
 // GetVersion returns the software version string of the connected Zabbix API.
-func (c *Session) GetVersion() (string, error) {
-	if c.APIVersion == "" {
+func (c *Session) GetVersion() (*types.ZBXVersion, error) {
+	if c.APIVersion == nil {
 		// get Zabbix API version
 		res, err := c.Do(NewRequest("apiinfo.version", nil))
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 
 		err = res.Bind(&c.APIVersion)
 		if err != nil {
-			return "", err
+			return nil, err
 		}
 	}
+
 	return c.APIVersion, nil
 }
 

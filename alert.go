@@ -1,8 +1,7 @@
 package zabbix
 
 import (
-	"fmt"
-	"time"
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 const (
@@ -42,43 +41,43 @@ const (
 // See: https://www.zabbix.com/documentation/2.2/manual/config/notifications
 type Alert struct {
 	// AlertID is the unique ID of the Alert.
-	AlertID string
+	AlertID string `json:"alertid"`
 
 	// ActionID is the unique ID of the Action that generated this Alert.
-	ActionID string
+	ActionID string `json:"actionid"`
 
 	// AlertType is the type of the Alert.
 	// AlertType must be one of the AlertType constants.
-	AlertType int
+	AlertType int `json:"alerttype,string"`
 
 	// Timestamp is the UTC timestamp at which the Alert was generated.
-	Timestamp time.Time
+	Timestamp types.ZBXUnixTimestamp `json:"clock,string"`
 
 	// ErrorText is the error message if there was a problem sending a message
 	// or running a remote command.
-	ErrorText string
+	ErrorText string `json:"error"`
 
 	// EscalationStep is the escalation step during which the Alert was
 	// generated.
-	EscalationStep int
+	EscalationStep int `json:"esc_step,string"`
 
 	// EventID is the unique ID of the Event that triggered this Action that
 	// generated this Alert.
-	EventID string
+	EventID string `json:"eventid"`
 
 	// MediaTypeID is the unique ID of the Media Type that was used to send this
 	// Alert if the AlertType is AlertTypeMessage.
-	MediaTypeID string
+	MediaTypeID string `json:"mediatypeid"`
 
 	// Message is the Alert message body if AlertType is AlertTypeMessage.
-	Message string
+	Message string `json:"message"`
 
 	// RetryCount is the number of times Zabbix tried to send a message.
-	RetryCount int
+	RetryCount int `json:"retries,string"`
 
 	// Recipient is the end point address of a message if AlertType is
 	// AlertTypeMessage.
-	Recipient string
+	Recipient string `json:"sendto"`
 
 	// Status indicates the outcome of executing the Alert.
 	//
@@ -87,19 +86,19 @@ type Alert struct {
 	//
 	// If AlertType is AlertTypeRemoteCommand, Status must be one of the
 	// AlertCommandStatus constants.
-	Status int
+	Status int `json:"status,string"`
 
 	// Subject is the Alert message subject if AlertType is AlertTypeMessage.
-	Subject string
+	Subject string `json:"subject"`
 
 	// UserID is the unique ID of the User the Alert message was sent to.
-	UserID string
+	UserID string `json:"userid"`
 
 	// Hosts is an array of Hosts that triggered this Alert.
 	//
 	// Hosts is only populated if AlertGetParams.SelectHosts is given in the
 	// query parameters that returned this Alert.
-	Hosts []Host
+	Hosts []Host `json:"hosts"`
 }
 
 // AlertGetParams is query params for alert.get call
@@ -125,7 +124,7 @@ type AlertGetParams struct {
 // ErrNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetAlerts(params AlertGetParams) ([]Alert, error) {
-	alerts := make([]jAlert, 0)
+	alerts := make([]Alert, 0)
 	err := c.Get("alert.get", params, &alerts)
 	if err != nil {
 		return nil, err
@@ -135,16 +134,5 @@ func (c *Session) GetAlerts(params AlertGetParams) ([]Alert, error) {
 		return nil, ErrNotFound
 	}
 
-	// map JSON Alerts to Go Alerts
-	out := make([]Alert, len(alerts))
-	for i, jalert := range alerts {
-		alert, err := jalert.Alert()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Alert %d in response: %v", i, err)
-		}
-
-		out[i] = *alert
-	}
-
-	return out, nil
+	return alerts, nil
 }

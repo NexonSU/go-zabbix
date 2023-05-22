@@ -1,8 +1,9 @@
 package zabbix
 
 import (
-	"fmt"
 	"time"
+
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 const (
@@ -94,35 +95,35 @@ const (
 // See: https://www.zabbix.com/documentation/2.2/manual/config/events
 type Event struct {
 	// EventID is the ID of the Event.
-	EventID string
+	EventID string `json:"eventid"`
 
 	// Acknowledged indicates if the Event has been acknowledged by an operator.
-	Acknowledged bool
+	Acknowledged types.ZBXBoolean `json:"acknowledged,string"`
 
-	// Timestamp is the UTC timestamp at which the Event occurred.
-	Timestamp time.Time
+	clock       int64 `json:"clock,string"`
+	nanoseconds int64 `json:"ns,string"`
 
 	// Source is the type of the Event source.
 	//
 	// Source must be one of the EventSource constants.
-	Source int
+	Source int `json:"source,string"`
 
 	// ObjectType is the type of the Object that is related to the Event.
 	// ObjectType must be one of the EventObjectType constants.
-	ObjectType int
+	ObjectType int `json:"object,string"`
 
 	// ObjectID is the unique identifier of the Object that caused this Event.
-	ObjectID int
+	ObjectID int `json:"objectid,string"`
 
 	// Value is the state of the related Object.
 	//
 	// Value must be one of the EventValue constants, according to the Event's
 	// Source type.
-	Value int
+	Value int `json:"value,string"`
 
 	// ValueChanges indicates if the state of the related Object has changed
 	// since the previous Event.
-	ValueChanged bool
+	ValueChanged types.ZBXBoolean `json:"value_changed"`
 
 	// Hosts is an array of Host which contained the Object which created this
 	// Event.
@@ -130,7 +131,13 @@ type Event struct {
 	// Hosts is only populated if EventGetParams.SelectHosts is given in the
 	// query parameters that returned this Event and the Event Source is one of
 	// EventSourceTrigger or EventSourceDiscoveryRule.
-	Hosts []Host
+	Hosts []Host `json:"hosts"`
+}
+
+// Timestamp returns time.Time depending on the seconds and nanoseconds returned
+// by Zabbix
+func (e *Event) Timestamp() time.Time {
+	return time.Unix(e.clock, e.nanoseconds)
 }
 
 // EventGetParams is query params for event.get call
@@ -206,7 +213,7 @@ type EventGetParams struct {
 // ErrEventNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetEvents(params EventGetParams) ([]Event, error) {
-	events := make([]jEvent, 0)
+	events := make([]Event, 0)
 	err := c.Get("event.get", params, &events)
 	if err != nil {
 		return nil, err
@@ -216,16 +223,5 @@ func (c *Session) GetEvents(params EventGetParams) ([]Event, error) {
 		return nil, ErrNotFound
 	}
 
-	// map JSON Events to Go Events
-	out := make([]Event, len(events))
-	for i, jevent := range events {
-		event, err := jevent.Event()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Event %d in response: %v", i, err)
-		}
-
-		out[i] = *event
-	}
-
-	return out, nil
+	return events, nil
 }

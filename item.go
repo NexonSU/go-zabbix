@@ -1,34 +1,30 @@
 package zabbix
 
-import (
-	"fmt"
-)
-
 // Item represents a Zabbix Item returned from the Zabbix API.
 //
 // See: https://www.zabbix.com/documentation/4.0/manual/api/reference/item/object
 type Item struct {
 	// HostID is the unique ID of the Host.
-	HostID int
+	HostID string `json:"hostid,omitempty"`
 
 	// ItemID is the unique ID of the Item.
-	ItemID int
+	ItemID string `json:"itemid"`
 
 	// Itemname is the technical name of the Item.
-	ItemName string
+	ItemName string `json:"name"`
 
 	// ItemDescr is the description of the Item.
-	ItemDescr string
+	ItemDescr string `json:"description,omitempty"`
 
 	// LastClock is the last Item epoh time.
-	LastClock int
+	LastClock int `json:"lastclock,string,omitempty"`
 
 	// LastValue is the last value of the Item.
-	LastValue string
+	LastValue string `json:"lastvalue,omitempty"`
 
 	// LastValueType is the type of LastValue
 	// 0 - float; 1 - text; 3 - int;
-	LastValueType int
+	LastValueType int `json:"value_type,string"`
 }
 
 type ItemTagFilter struct {
@@ -115,23 +111,15 @@ type ItemGetParams struct {
 // ErrEventNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetItems(params ItemGetParams) ([]Item, error) {
-	items := make([]jItem, 0)
+	items := make([]Item, 0)
 	err := c.Get("item.get", params, &items)
 	if err != nil {
 		return nil, err
 	}
+
 	if len(items) == 0 {
 		return nil, ErrNotFound
 	}
-	// map JSON Events to Go Events
-	out := make([]Item, len(items))
-	for i, jitem := range items {
-		item, err := jitem.Item()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Item %d in response: %v", i, err)
-		}
-		out[i] = *item
-	}
 
-	return out, nil
+	return items, nil
 }

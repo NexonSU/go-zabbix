@@ -40,6 +40,7 @@ func NewRequest(method string, params interface{}) *Request {
 	if params == nil {
 		params = map[string]string{}
 	}
+
 	return &Request{
 		JSONRPCVersion: "2.0",
 		Method:         method,

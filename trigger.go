@@ -1,7 +1,7 @@
 package zabbix
 
 import (
-	"fmt"
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 const (
@@ -45,66 +45,66 @@ const (
 // See: https://www.zabbix.com/documentation/3.4/manual/config/triggers
 type Trigger struct {
 	// TriggerID is the ID of the Trigger.
-	TriggerID string
+	TriggerID string `json:"triggerid"`
 
 	// AlarmState shows whether the trigger is in OK or problem state.
 	//
 	// AlarmState must be one of the TriggerAlarmState constants.
-	AlarmState int
+	AlarmState int `json:"value,string"`
 
 	// Description is the name of the trigger.
-	Description string
+	Description string `json:"description"`
 
 	// Enabled shows whether the trigger is enabled or disabled.
-	Enabled bool
+	Enabled types.ZBXBoolean `json:"status,string"`
 
 	// Expression is the trigger expression
-	Expression string
+	Expression string `json:"expression"`
 
 	// Hosts is an array of Hosts that the trigger belongs.
 	//
 	// Hosts is only populated if TriggerGetParams.SelectHosts is given in the
 	// query parameters that returned this Trigger.
-	Hosts []Host
+	Hosts []Host `json:"hosts"`
 
 	// Groups is an array of Hostgroups that the trigger belongs.
 	//
 	// Groups is only populated if TriggerGetParams.SelectGroups is given in the
 	// query parameters that returned this Trigger.
-	Groups []Hostgroup
+	Groups []Hostgroup `json:"groups"`
 
 	// LastChange is the time when the trigger last changed its state.
-	LastChange int
+	LastChange int `json:"lastchange,string"`
 
 	// Severity of the trigger.
 	//
 	// Severity must be one of the TriggerSeverity constants.
-	Severity int
+	Severity int `json:"priority,string"`
 
 	// State of the trigger.
 	//
 	// State must be one of the TriggerState constants.
-	State int
+	State int `json:"state,string"`
 
 	// Tags is an array of trigger tags
 	//
 	// Tags is only populated if TriggerGetParams.SelectTags is given in the
 	// query parameters that returned this Trigger.
-	Tags []TriggerTag
+	Tags []TriggerTag `json:"tags"`
 
 	// LastEvent is the latest event for the trigger
 	//
 	// LastEvent is only populated if TriggerGetParams.SelectLastEvent is set
-	LastEvent *Event
+	LastEvent *Event `json:"lastEvent"`
 
 	// URL is a link to the trigger graph in Zabbix
-	URL string
+	URL string `json:"url"`
 }
 
 // TriggerTag is trigger tag
 type TriggerTag struct {
-	Name  string
-	Value string
+	Name  string `json:"tag"`
+	Value string `json:"value"`
 }
 
 // TriggerGetParams is params for trigger.get query
@@ -196,7 +196,7 @@ type TriggerGetParams struct {
 // ErrTriggerNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetTriggers(params TriggerGetParams) ([]Trigger, error) {
-	triggers := make([]jTrigger, 0)
+	triggers := make([]Trigger, 0)
 	err := c.Get("trigger.get", params, &triggers)
 	if err != nil {
 		return nil, err
@@ -206,16 +206,5 @@ func (c *Session) GetTriggers(params TriggerGetParams) ([]Trigger, error) {
 		return nil, ErrNotFound
 	}
 
-	// map JSON Triggers to Go Triggers
-	out := make([]Trigger, len(triggers))
-	for i, jtrigger := range triggers {
-		trigger, err := jtrigger.Trigger()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Trigger %d in response: %v", i, err)
-		}
-
-		out[i] = *trigger
-	}
-
-	return out, nil
+	return triggers, nil
 }

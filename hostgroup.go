@@ -1,9 +1,5 @@
 package zabbix
 
-import (
-	"fmt"
-)
-
 const (
 	// HostgroupSourcePlain indicates that a Hostgroup was created in the normal way.
 	HostgroupSourcePlain = 0
@@ -113,7 +109,7 @@ type HostgroupGetParams struct {
 // ErrEventNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetHostgroups(params HostgroupGetParams) ([]Hostgroup, error) {
-	hostgroups := make([]jHostgroup, 0)
+	hostgroups := make([]Hostgroup, 0)
 	err := c.Get("hostgroup.get", params, &hostgroups)
 	if err != nil {
 		return nil, err
@@ -123,16 +119,5 @@ func (c *Session) GetHostgroups(params HostgroupGetParams) ([]Hostgroup, error) 
 		return nil, ErrNotFound
 	}
 
-	// map JSON Events to Go Events
-	out := make([]Hostgroup, len(hostgroups))
-	for i, jhostgroup := range hostgroups {
-		hostgroup, err := jhostgroup.Hostgroup()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping Hostgroup %d in response: %v", i, err)
-		}
-
-		out[i] = *hostgroup
-	}
-
-	return out, nil
+	return hostgroups, nil
 }

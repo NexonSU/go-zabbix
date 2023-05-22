@@ -1,5 +1,7 @@
 package zabbix
 
+import "strconv"
+
 const (
 	// HostSourceDefault indicates that a Host was created in the normal way.
 	HostSourceDefault = 0
@@ -98,7 +100,7 @@ type Host struct {
 	TLSPSK         string `json:"tls_psk"`
 
 	// Host Inventory. Is filled when SelectInventory is used on HostGetParams
-	Inventory map[string]string `json:"inventory,omitempty"`
+	Inventory HostInventory `json:"inventory,omitempty"`
 
 	// Interfqace of host. Is filled where SelectInterfaces is used on HostGetParams
 	Interfaces []HostInterface `json:"interfaces,omitempty"`

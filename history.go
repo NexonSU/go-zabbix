@@ -1,37 +1,37 @@
 package zabbix
 
 import (
-	"fmt"
+	"time"
 )
 
 // History represents a Zabbix History returned from the Zabbix API.
 //
 // See: https://www.zabbix.com/documentation/4.0/manual/api/reference/history/object
 type History struct {
-	// Clock is the time when that value was received.
-	Clock int
-
 	// ItemID is the ID of the related item.
-	ItemID int
-
-	// Ns is the nanoseconds when the value was received.
-	Ns int
+	ItemID int `json:"itemid,string"`
 
 	// Value is the received value.
 	// Possible types: 0 - float; 1 - character; 2 - log; 3 - int; 4 - text;
-	Value string
+	Value string `json:"value"`
 
 	// LogEventID is the Windows event log entry ID.
-	LogEventID int
+	LogEventID int `json:"logeventid,string,omitempty"`
 
 	// Severity is the Windows event log entry level.
-	Severity int
+	Severity int `json:"severity,string,omitempty"`
 
 	// Source is the Windows event log entry source.
-	Source string
+	Source string `json:"source,omitempty"`
 
-	// Timestamp is the Windows event log entry time.
-	Timestamp string
+	clock       int64 `json:"clock,string"`
+	nanoseconds int64 `json:"ns,string"`
+}
+
+// Timestamp returns time.Time depending on the seconds and nanoseconds returned
+// by Zabbix
+func (h *History) Timestamp() time.Time {
+	return time.Unix(h.clock, h.nanoseconds)
 }
 
 type HistoryGetParams struct {
@@ -63,23 +63,15 @@ type HistoryGetParams struct {
 // ErrEventNotFound is returned if the search result set is empty.
 // An error is returned if a transport, parsing or API error occurs.
 func (c *Session) GetHistories(params HistoryGetParams) ([]History, error) {
-	histories := make([]jHistory, 0)
+	histories := make([]History, 0)
 	err := c.Get("history.get", params, &histories)
 	if err != nil {
 		return nil, err
 	}
+
 	if len(histories) == 0 {
 		return nil, ErrNotFound
 	}
-	// map JSON Events to Go Events
-	out := make([]History, len(histories))
-	for i, jhistory := range histories {
-		history, err := jhistory.History()
-		if err != nil {
-			return nil, fmt.Errorf("Error mapping History %d in response: %v", i, err)
-		}
-		out[i] = *history
-	}
 
-	return out, nil
+	return histories, nil
 }

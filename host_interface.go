@@ -1,5 +1,7 @@
 package zabbix
 
+import "github.com/cavaliercoder/go-zabbix/types"
+
 const (
 	// HostInterfaceAvailabilityUnknown Unknown availability of host, never has come online
 	HostInterfaceAvailabilityUnknown = 0
@@ -38,19 +40,19 @@ type HostInterface struct {
 	Error string `json:"error,omitempty"`
 
 	// (readonly) Time when host interface became unavailable.
-	ErrorsFrom *UnixTimestamp `json:"errors_from,string,omitempty"`
+	ErrorsFrom *types.ZBXUnixTimestamp `json:"errors_from,string,omitempty"`
 
 	// ID of the host the interface belongs to.
 	HostID string `json:"hostid"`
 
 	// Whether the interface is used as default on the host. Only one interface of some type can be set as default on a host.
-	Main ZBXBoolean `json:"main,string"`
+	Main types.ZBXBoolean `json:"main,string"`
 
 	// Interface type.
 	Type int `json:"type,string"`
 
 	// Whether the connection should be made via IP.
-	UseIP ZBXBoolean `json:"useip,string"`
+	UseIP types.ZBXBoolean `json:"useip,string"`
 }
 
 type HostInterfaceGetParams struct {

@@ -3,7 +3,8 @@ package zabbix
 import (
 	"bytes"
 	"encoding/json"
-	"strings"
+
+	"github.com/cavaliercoder/go-zabbix/types"
 )
 
 const (
@@ -21,23 +22,6 @@ const (
 	// ProxyTLSConnectCertificate connect with certificate to or from host
 	ProxyTLSConnectCertificate = 4
 )
-
-// ProxyAddresses IP addresses or DNS names of active Zabbix proxy.
-type ProxyAddresses []string
-
-func (addr *ProxyAddresses) UnmarshalJSON(data []byte) error {
-	var input string
-	err := json.Unmarshal(data, &input)
-	if err != nil {
-		return err
-	}
-
-	*addr = strings.Split(input, ",")
-	return nil
-}
-func (addr *ProxyAddresses) MarshalJSON() ([]byte, error) {
-	return json.Marshal(strings.Join(*addr, ","))
-}
 
 // Proxy Proxy infomation returned from Zabbix API
 type Proxy struct {
@@ -59,7 +43,7 @@ type Proxy struct {
 	TLSPSKIdentity string `json:"tls_psk_identity"`
 	TLSPSK         string `json:"tls_psk"`
 
-	ProxyAddresses ProxyAddresses `json:"proxy_address"`
+	ProxyAddresses types.ZBXProxyAddresses `json:"proxy_address"`
 
 	Interface ProxyInterface `json:"interface,omitempty"`
 }
@@ -80,7 +64,7 @@ type ProxyInterface struct {
 	IP string `json:"ip"`
 
 	// Whether the connection should be made via IP.
-	UseIP ZBXBoolean `json:"useip,string"`
+	UseIP types.ZBXBoolean `json:"useip,string"`
 
 	Port int `json:"port,string"`
 }

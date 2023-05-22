@@ -1,11 +1,13 @@
-package zabbix
+package test
 
 import (
 	"os"
 	"testing"
+
+	"github.com/cavaliercoder/go-zabbix"
 )
 
-var session *Session
+var session *zabbix.Session
 
 func GetTestCredentials() (username string, password string, url string) {
 	url = os.Getenv("ZBX_URL")
@@ -26,12 +28,12 @@ func GetTestCredentials() (username string, password string, url string) {
 	return username, password, url
 }
 
-func GetTestSession(t *testing.T) *Session {
+func GetTestSession(t *testing.T) *zabbix.Session {
 	var err error
 	if session == nil {
 		username, password, url := GetTestCredentials()
 
-		session, err = NewSession(url, username, password)
+		session, err = zabbix.NewSession(url, username, password)
 		if err != nil {
 			t.Fatalf("Error creating a session: %v", err)
 		}
@@ -44,7 +46,7 @@ func TestSession(t *testing.T) {
 	s := GetTestSession(t)
 
 	v, err := s.GetVersion()
-	if err != nil || v == "" {
+	if err != nil || v == nil {
 		t.Errorf("No API version found for session")
 	}
 }

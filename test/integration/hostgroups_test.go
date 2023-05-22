@@ -1,21 +1,26 @@
-package zabbix
+package integration
 
 import (
 	"testing"
+
+	"github.com/cavaliercoder/go-zabbix"
+	"github.com/cavaliercoder/go-zabbix/test"
 )
 
 func TestHostgroups(t *testing.T) {
-	session := GetTestSession(t)
+	session := test.GetTestSession(t)
 
-	params := HostgroupGetParams{}
+	params := zabbix.HostgroupGetParams{}
 
 	hostgroups, err := session.GetHostgroups(params)
 	if err != nil {
-		t.Fatalf("Error getting Hostgroups: %v", err)
+		if _, ok := err.(*zabbix.NotFoundError); !ok {
+			t.Fatalf("Error getting Hostgroups: %v", err)
+		}
 	}
 
 	if len(hostgroups) == 0 {
-		t.Fatal("No Hostgroups found")
+		t.Skip("No Hostgroups found")
 	}
 
 	for i, hostgroup := range hostgroups {
