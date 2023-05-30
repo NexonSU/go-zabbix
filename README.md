@@ -91,6 +91,32 @@ func main() {
 }
 ```
 
+## Running the tests
+
+### Unit tests
+Running the unit tests:
+
+```bash
+go test -v "./go-zabbix/.."
+go test -v "./types/..."
+# or:
+make unittests
+```
+
+### Integration tests
+
+To run the integration tests against a specific Zabbix Server version, you'll need Docker. Then start the containers:
+
+```bash
+export ZBX_VERSION=6.4
+docker compose up -d
+# server should be running in a minute
+# run tests:
+go test -v "./test/integration/..."
+# or:
+make integration
+```
+
 ## License
 
 Released under the [GNU GPL License](https://github.com/fabiang/go-zabbix/blob/master/LICENSE)
