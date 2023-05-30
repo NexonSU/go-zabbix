@@ -19,6 +19,18 @@ stable, fast, and allows for loose typing (using types such as`interface{}` or
 The package aims to have comprehensive coverage of Zabbix API methods from v1.8
 through to v7.0 without introducing limitations to the native API methods.
 
+## Fork
+
+Currently maintained fork of https://github.com/zabbix-tools/go-zabbix
+
+New Features:
+
+* Support for Zabbix JSONRPC API 4.0 - 7.0
+* Support for host interfaces
+* More info on hosts
+* Support for proxies
+* Allow executing scripts on Zabbix Server
+
 ## Getting started
 
 Get the package:
