@@ -7,7 +7,11 @@ import (
 	"github.com/fabiang/go-zabbix/test"
 )
 
-func TestTriggers(t *testing.T) {
+func TestTriggersIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	session := test.GetTestSession(t)
 
 	params := zabbix.TriggerGetParams{}

@@ -7,7 +7,11 @@ import (
 	"github.com/fabiang/go-zabbix/test"
 )
 
-func TestActions(t *testing.T) {
+func TestActionsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	session := test.GetTestSession(t)
 
 	params := zabbix.ActionGetParams{}

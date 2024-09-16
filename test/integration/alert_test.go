@@ -7,7 +7,11 @@ import (
 	"github.com/fabiang/go-zabbix/test"
 )
 
-func TestAlerts(t *testing.T) {
+func TestAlertsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	session := test.GetTestSession(t)
 
 	params := zabbix.AlertGetParams{

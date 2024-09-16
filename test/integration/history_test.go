@@ -7,7 +7,11 @@ import (
 	"github.com/fabiang/go-zabbix/test"
 )
 
-func TestHistories(t *testing.T) {
+func TestHistoriesIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	session := test.GetTestSession(t)
 
 	params := zabbix.HistoryGetParams{}

@@ -7,7 +7,11 @@ import (
 	"github.com/fabiang/go-zabbix/test"
 )
 
-func TestItems(t *testing.T) {
+func TestItemsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	session := test.GetTestSession(t)
 
 	params := zabbix.ItemGetParams{}
