@@ -48,8 +48,8 @@ jobs:
             suffix: "-latest"
           - version: "6.4"
             suffix: "-latest"
-          - version: "trunk" # will become 7.0
-            suffix: ""
+          - version: "7.0" # will become 7.0
+            suffix: "-latest"
 
     name: "Zabbix ${{ matrix.zabbix.version }} Integration Tests"
 
