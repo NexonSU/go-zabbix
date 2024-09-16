@@ -40,16 +40,22 @@ jobs:
         zabbix:
           - version: "4.0"
             suffix: "-latest"
+            postgress_version: "15-alpine"
           - version: "5.0"
             suffix: "-latest"
+            postgress_version: "15-alpine"
           - version: "6.0"
             suffix: "-latest"
+            postgress_version: "15-alpine"
           - version: "6.2"
             suffix: "-latest"
+            postgress_version: "15-alpine"
           - version: "6.4"
             suffix: "-latest"
-          - version: "trunk" # will become 7.0
-            suffix: ""
+            postgress_version: "16-alpine"
+          - version: "7.0"
+            suffix: "-latest"
+            postgress_version: "16-alpine"
 
     name: "Zabbix ${{ matrix.zabbix.version }} Integration Tests"
 
@@ -67,15 +73,21 @@ jobs:
       env:
         ZBX_VERSION: "${{ matrix.zabbix.version }}"
         ZBX_VERSION_SUFFIX: "${{ matrix.zabbix.suffix }}"
+        POSTGRES_VERSION: "${{ matrix.zabbix.postgress_version }}"
 
     - name: Wait for Zabbix server to become available
-      uses: iFaxity/wait-on-action@v1.1.0
+      id: wait_for_server
+      uses: iFaxity/wait-on-action@v1.2.1
       with:
         resource: tcp:localhost:10051
-        timeout: 900000
+        timeout: 300000
         interval: 10000
         delay: 60000
         log: true
+
+    - name: Server logs
+      if: always() && steps.wait_for_server.outcome == 'failure'
+      run: docker compose -f "docker-compose.yml" logs server
 
     - name: Test
       run: go test -v "./test/integration/..."
