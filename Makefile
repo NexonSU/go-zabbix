@@ -1,8 +1,7 @@
 tests: unittests integration
 
 unittests:
-	go test -v "./go-zabbix/.."
-	go test -v "./types/..."
+	go test -v -short "./..."
 
 integration:
-	go test -v "./test/integration/..."
+	go test -v -run Integration "./..."

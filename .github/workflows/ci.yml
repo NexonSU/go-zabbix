@@ -24,11 +24,8 @@ jobs:
       with:
         go-version: '1.20'
 
-    - name: Test  Package
-      run: go test -v "./go-zabbix/.."
-
-    - name: Test Types Package
-      run: go test -v "./types/..."
+    - name: Test
+      run: go test -v -short "./..."
 
   integration:
     timeout-minutes: 31
@@ -90,7 +87,7 @@ jobs:
       run: docker compose -f "docker-compose.yml" logs server
 
     - name: Test
-      run: go test -v "./test/integration/..."
+      run: go test -v -run Integration "./..."
 
     - name: Stop containers
       if: always()

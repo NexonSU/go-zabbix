@@ -109,8 +109,7 @@ func main() {
 Running the unit tests:
 
 ```bash
-go test -v "./go-zabbix/.."
-go test -v "./types/..."
+go test -v -short "./..."
 # or:
 make unittests
 ```
@@ -124,7 +123,7 @@ export ZBX_VERSION=6.4
 docker compose up -d
 # server should be running in a minute
 # run tests:
-go test -v "./test/integration/..."
+go test -v -run Integration "./..."
 # or:
 make integration
 ```

@@ -30,7 +30,11 @@ func testHost(t *testing.T, params zabbix.HostGetParams) {
 	t.Logf("Validated %d Hosts", len(hosts))
 }
 
-func TestHostsTemplates(t *testing.T) {
+func TestHostsTemplatesIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		IncludeTemplates: true,
 	}
@@ -38,7 +42,11 @@ func TestHostsTemplates(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsGroups(t *testing.T) {
+func TestHostsGroupsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectGroups: zabbix.SelectExtendedOutput,
 	}
@@ -46,7 +54,11 @@ func TestHostsGroups(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsApplications(t *testing.T) {
+func TestHostsApplicationsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectApplications: zabbix.SelectExtendedOutput,
 	}
@@ -54,7 +66,11 @@ func TestHostsApplications(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsDiscoveries(t *testing.T) {
+func TestHostsDiscoveriesIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectDiscoveries: zabbix.SelectExtendedOutput,
 	}
@@ -63,7 +79,10 @@ func TestHostsDiscoveries(t *testing.T) {
 
 }
 
-func TestHostsDiscoveryRule(t *testing.T) {
+func TestHostsDiscoveryRuleIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
 
 	params := zabbix.HostGetParams{
 		SelectDiscoveryRule: zabbix.SelectExtendedOutput,
@@ -72,7 +91,11 @@ func TestHostsDiscoveryRule(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsGraphs(t *testing.T) {
+func TestHostsGraphsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectGraphs: zabbix.SelectExtendedOutput,
 	}
@@ -80,7 +103,11 @@ func TestHostsGraphs(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsHostDiscovery(t *testing.T) {
+func TestHostsHostDiscoveryIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectHostDiscovery: zabbix.SelectExtendedOutput,
 	}
@@ -88,7 +115,11 @@ func TestHostsHostDiscovery(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsWebScenarios(t *testing.T) {
+func TestHostsWebScenariosIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectWebScenarios: zabbix.SelectExtendedOutput,
 	}
@@ -96,7 +127,11 @@ func TestHostsWebScenarios(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsInterfaces(t *testing.T) {
+func TestHostsInterfacesIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectInterfaces: zabbix.SelectExtendedOutput,
 	}
@@ -104,7 +139,11 @@ func TestHostsInterfaces(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsInventory(t *testing.T) {
+func TestHostsInventoryIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectInventory: zabbix.SelectExtendedOutput,
 	}
@@ -112,7 +151,11 @@ func TestHostsInventory(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsItems(t *testing.T) {
+func TestHostsItemsIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectItems: zabbix.SelectExtendedOutput,
 	}
@@ -120,7 +163,11 @@ func TestHostsItems(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsMacros(t *testing.T) {
+func TestHostsMacrosIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectMacros: zabbix.SelectExtendedOutput,
 	}
@@ -128,7 +175,11 @@ func TestHostsMacros(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsParentTemplates(t *testing.T) {
+func TestHostsParentTemplatesIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectParentTemplates: zabbix.SelectExtendedOutput,
 	}
@@ -136,7 +187,11 @@ func TestHostsParentTemplates(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsScreens(t *testing.T) {
+func TestHostsScreensIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectScreens: zabbix.SelectExtendedOutput,
 	}
@@ -144,7 +199,11 @@ func TestHostsScreens(t *testing.T) {
 	testHost(t, params)
 }
 
-func TestHostsTriggers(t *testing.T) {
+func TestHostsTriggersIntegration(t *testing.T) {
+	if testing.Short() {
+		t.Skip()
+	}
+
 	params := zabbix.HostGetParams{
 		SelectTriggers: zabbix.SelectExtendedOutput,
 	}
