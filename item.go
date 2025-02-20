@@ -4,6 +4,9 @@ package zabbix
 //
 // See: https://www.zabbix.com/documentation/4.0/manual/api/reference/item/object
 type Item struct {
+	// Error is the error text indicating any problems with updating the item.
+	Error string `json:"error,omitempty"`
+
 	// HostID is the unique ID of the Host.
 	HostID string `json:"hostid,omitempty"`
 
