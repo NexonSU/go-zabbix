@@ -56,10 +56,10 @@ type GetParameters struct {
 
 	// TextSearch causes an API query to return only results that match the
 	// given wilcard search where the map keys are the desired field names and
-	// the map values are the search expression.
+	// the map values are an array of search expressions.
 	//
 	// Only string and text fields are supported.
-	TextSearch map[string]string `json:"search,omitempty"`
+	TextSearch map[string][]string `json:"search,omitempty"`
 
 	// TextSearchByStart causes an API query to return only results that match
 	// the search parameters given in TextSearch where each given field starts
