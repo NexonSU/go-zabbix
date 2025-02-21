@@ -27,7 +27,7 @@ type UserMacroGetParams struct {
 	// Return only host macros that belong to the given templates. (Zabbix 2.x only)
 	TemplateIDs []string `json:"templateids,omitempty"`
 
-	// TODO: add selectGroups, selectHosts and selectTemplates queries
+	// TODO: selectHosts and selectTemplates queries
 }
 
 // GetUserMacro queries the Zabbix API for user macros matching the given search

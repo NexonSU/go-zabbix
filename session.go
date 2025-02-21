@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/fabiang/go-zabbix/types"
@@ -14,10 +14,12 @@ import (
 var (
 	ErrNotFound      = &NotFoundError{"No results were found matching the given search parameters"}
 	zabbixVersion600 *types.ZBXVersion
+	zabbixVersion640 *types.ZBXVersion
 )
 
 func init() {
 	zabbixVersion600, _ = types.NewZBXVersion("6.0.0")
+	zabbixVersion640, _ = types.NewZBXVersion("6.4.0")
 }
 
 // A Session is an authenticated Zabbix JSON-RPC API client. It must be
@@ -70,7 +72,7 @@ func (c *Session) login(username, password string) error {
 		params["username"] = username
 	}
 
-	res, err := c.Do(NewRequest("user.login", params))
+	res, err := c.Do(NewRequest("user.login", params), true)
 	if err != nil {
 		return fmt.Errorf("Error logging in to Zabbix API: %v", err)
 	}
@@ -87,7 +89,7 @@ func (c *Session) login(username, password string) error {
 func (c *Session) GetVersion() (*types.ZBXVersion, error) {
 	if c.APIVersion == nil {
 		// get Zabbix API version
-		res, err := c.Do(NewRequest("apiinfo.version", nil))
+		res, err := c.Do(NewRequest("apiinfo.version", nil), true)
 		if err != nil {
 			return nil, err
 		}
@@ -116,9 +118,21 @@ func (c *Session) AuthToken() string {
 // When err is nil, resp always contains a non-nil resp.Body.
 //
 // Generally Get or a wrapper function will be used instead of Do.
-func (c *Session) Do(req *Request) (resp *Response, err error) {
-	// configure request
-	req.AuthToken = c.Token
+func (c *Session) Do(req *Request, noAuthRequired bool) (resp *Response, err error) {
+	if noAuthRequired == false {
+		// get Zabbix API version
+		ver, err := c.GetVersion()
+		if err != nil {
+			return nil, fmt.Errorf("Failed to retrieve Zabbix API version: %v", err)
+		}
+
+		// Zabbix 6.4 uses `Authorization` header, therefore "auth" parameter
+		// has been deprecated and was removed in 7.2
+		// See: https://www.zabbix.com/documentation/7.2/en/manual/api/changes
+		if ver.Compare(zabbixVersion640) < 0 {
+			req.AuthToken = c.Token
+		}
+	}
 
 	// encode request as json
 	b, err := json.Marshal(req)
@@ -135,6 +149,9 @@ func (c *Session) Do(req *Request) (resp *Response, err error) {
 	}
 	r.ContentLength = int64(len(b))
 	r.Header.Add("Content-Type", "application/json-rpc")
+	if noAuthRequired == false {
+		r.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.Token))
+	}
 
 	// send request
 	client := c.client
@@ -149,7 +166,7 @@ func (c *Session) Do(req *Request) (resp *Response, err error) {
 	defer res.Body.Close()
 
 	// read response body
-	b, err = ioutil.ReadAll(res.Body)
+	b, err = io.ReadAll(res.Body)
 	if err != nil {
 		return nil, fmt.Errorf("Error reading response: %v", err)
 	}
@@ -181,7 +198,7 @@ func (c *Session) Do(req *Request) (resp *Response, err error) {
 // An error is return if a transport, marshalling or API error happened.
 func (c *Session) Get(method string, params interface{}, v interface{}) error {
 	req := NewRequest(method, params)
-	resp, err := c.Do(req)
+	resp, err := c.Do(req, false)
 	if err != nil {
 		return err
 	}

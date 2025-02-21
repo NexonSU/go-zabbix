@@ -2,7 +2,7 @@ package zabbix_test
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/fabiang/go-zabbix"
@@ -22,7 +22,7 @@ func init() {
 }
 
 func prepareTemporaryDir(t *testing.T) (dir string, success bool) {
-	tempDir, err := ioutil.TempDir("", "zabbix-session-test")
+	tempDir, err := os.MkdirTemp("", "zabbix-session-test")
 
 	if err != nil {
 		t.Fatalf("cannot create a temporary dir for session cache: %v", err)

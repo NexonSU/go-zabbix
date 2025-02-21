@@ -104,6 +104,6 @@ func (c *Session) UpdateHostInterface(inter HostInterface) ([]string, error) {
 
 func (c *Session) DeleteHostInterface(inter HostInterface) (err error) {
 	req := NewRequest("hostinterface.delete", []string{inter.InterfaceID})
-	_, err = c.Do(req)
+	_, err = c.Do(req, false)
 	return
 }
