@@ -13,6 +13,9 @@ type Item struct {
 	// ItemID is the unique ID of the Item.
 	ItemID string `json:"itemid"`
 
+	// ItemKey is the key name of the item.
+	ItemKey string `json:"key_"`
+
 	// Itemname is the technical name of the Item.
 	ItemName string `json:"name"`
 
