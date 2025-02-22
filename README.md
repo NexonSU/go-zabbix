@@ -25,7 +25,7 @@ Currently maintained fork of https://github.com/zabbix-tools/go-zabbix
 
 New Features:
 
-* Support for Zabbix JSONRPC API 4.0 - 7.0
+* Support for Zabbix JSONRPC API 4.0 - 7.2
 * Support for host interfaces
 * More info on hosts
 * Support for proxies
@@ -130,4 +130,4 @@ make integration
 
 ## License
 
-Released under the [GNU GPL License](https://github.com/fabiang/go-zabbix/blob/master/LICENSE)
+Released under the [GNU GPL License](https://github.com/fabiang/go-zabbix/blob/main/LICENSE)
