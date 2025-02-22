@@ -159,6 +159,8 @@ type HostGetParams struct {
 
 	// SelectGroups causes the Host Groups that each Host belongs to to be
 	// attached in the search results.
+	//
+	// Deprecated: Depcreated since Zabbix 6.4 and removed in Zabbix 7.2
 	SelectGroups SelectQuery `json:"selectGroups,omitempty"`
 
 	// SelectApplications causes the Applications from each Host to be attached
@@ -217,7 +219,7 @@ func (c *Session) CountHosts(params HostGetParams) (int, error) {
 	params.GetParameters.CountOutput = true
 
 	req := NewRequest("host.get", &params)
-	resp, err := c.Do(req)
+	resp, err := c.Do(req, false)
 	if err != nil {
 		return 0, err
 	}

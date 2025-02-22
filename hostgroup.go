@@ -40,9 +40,13 @@ type HostgroupGetParams struct {
 	MaintenanceIDs []string `json:"maintenanceids,omitempty"`
 
 	// Return only host groups that contain monitored hosts
+	//
+	// Deprecated: Depcreated since Zabbix 6.4 and removed in Zabbix 7.2
 	MonitoredHosts int `json:"monitored_hosts,omitempty"`
 
 	// Return only host groups that contain hosts
+	//
+	// Deprecated: Depcreated since Zabbix 6.4 and removed in Zabbix 7.2
 	RealHosts int `json:"real_hosts,omitempty"`
 
 	// Return only host groups that contain templates
