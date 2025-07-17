@@ -15,7 +15,12 @@ func TestAlertsIntegration(t *testing.T) {
 	session := test.GetTestSession(t)
 
 	params := zabbix.AlertGetParams{
-		SelectHosts: zabbix.SelectExtendedOutput,
+		GetParameters: zabbix.GetParameters{
+			OutputFields: zabbix.SelectExtendedOutput,
+		},
+		SelectHosts:      zabbix.SelectExtendedOutput,
+		SelectUsers:      zabbix.SelectExtendedOutput,
+		SelectMediaTypes: zabbix.SelectExtendedOutput,
 	}
 
 	alerts, err := session.GetAlerts(params)
