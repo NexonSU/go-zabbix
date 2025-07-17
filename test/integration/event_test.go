@@ -15,8 +15,11 @@ func TestEventsIntegration(t *testing.T) {
 	session := test.GetTestSession(t)
 
 	params := zabbix.EventGetParams{
-		SelectHosts:         zabbix.SelectExtendedOutput,
-		SelectRelatedObject: zabbix.SelectExtendedOutput,
+		SelectHosts:            zabbix.SelectExtendedOutput,
+		SelectRelatedObject:    zabbix.SelectExtendedOutput,
+		SelectAlerts:           zabbix.SelectExtendedOutput,
+		SelectAcknowledgements: zabbix.SelectExtendedOutput,
+		SelectTags:             zabbix.SelectExtendedOutput,
 	}
 
 	events, err := session.GetEvents(params)
