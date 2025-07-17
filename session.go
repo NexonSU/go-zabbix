@@ -7,7 +7,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/fabiang/go-zabbix/types"
+	"github.com/NexonSU/go-zabbix/types"
 )
 
 // ErrNotFound describes an empty result set for an API call.

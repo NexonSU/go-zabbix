@@ -1,4 +1,4 @@
-module github.com/fabiang/go-zabbix
+module github.com/NexonSU/go-zabbix
 
 go 1.19
 

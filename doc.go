@@ -15,7 +15,7 @@ through to v3.0 without introducing limitations to the native API methods.
 
 	import (
 		"fmt"
-		"github.com/fabiang/go-zabbix"
+		"github.com/NexonSU/go-zabbix"
 	)
 
 	func main() {
@@ -49,6 +49,6 @@ through to v3.0 without introducing limitations to the native API methods.
 		fmt.Printf("Connected to Zabbix API v%s", session.GetVersion())
 	}
 
-For more information see: https://github.com/fabiang/go-zabbix
+For more information see: https://github.com/NexonSU/go-zabbix
 */
 package zabbix

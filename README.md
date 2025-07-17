@@ -2,9 +2,9 @@
 
 Go bindings for the Zabbix API
 
-[![go report card](https://goreportcard.com/badge/github.com/fabiang/go-zabbix "go report card")](https://goreportcard.com/report/github.com/fabiang/go-zabbix)
+[![go report card](https://goreportcard.com/badge/github.com/NexonSU/go-zabbix "go report card")](https://goreportcard.com/report/github.com/NexonSU/go-zabbix)
 [![GPL license](https://img.shields.io/badge/license-GPL-brightgreen.svg)](https://opensource.org/licenses/gpl-license)
-[![GoDoc](https://godoc.org/github.com/fabiang/go-zabbix?status.svg)](https://godoc.org/github.com/fabiang/go-zabbix)
+[![GoDoc](https://godoc.org/github.com/NexonSU/go-zabbix?status.svg)](https://godoc.org/github.com/NexonSU/go-zabbix)
 
 ## Overview
 
@@ -36,7 +36,7 @@ New Features:
 Get the package:
 
 ```
-go get "github.com/fabiang/go-zabbix"
+go get "github.com/NexonSU/go-zabbix"
 ```
 
 ```go
@@ -48,7 +48,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/fabiang/go-zabbix"
+	"github.com/NexonSU/go-zabbix"
 )
 
 func main() {
@@ -130,4 +130,4 @@ make integration
 
 ## License
 
-Released under the [GNU GPL License](https://github.com/fabiang/go-zabbix/blob/main/LICENSE)
+Released under the [GNU GPL License](https://github.com/NexonSU/go-zabbix/blob/main/LICENSE)

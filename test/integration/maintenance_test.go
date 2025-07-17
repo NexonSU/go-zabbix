@@ -3,8 +3,8 @@ package integration
 import (
 	"testing"
 
-	"github.com/fabiang/go-zabbix"
-	"github.com/fabiang/go-zabbix/test"
+	"github.com/NexonSU/go-zabbix"
+	"github.com/NexonSU/go-zabbix/test"
 )
 
 func TestMaintenanceIntegration(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fabiang/go-zabbix"
+	"github.com/NexonSU/go-zabbix"
 )
 
 var session *zabbix.Session

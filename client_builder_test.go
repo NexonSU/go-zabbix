@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fabiang/go-zabbix"
-	"github.com/fabiang/go-zabbix/test"
-	"github.com/fabiang/go-zabbix/types"
+	"github.com/NexonSU/go-zabbix"
+	"github.com/NexonSU/go-zabbix/test"
+	"github.com/NexonSU/go-zabbix/types"
 )
 
 const (
