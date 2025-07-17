@@ -2,35 +2,6 @@
 
 Go bindings for the Zabbix API
 
-[![go report card](https://goreportcard.com/badge/github.com/NexonSU/go-zabbix "go report card")](https://goreportcard.com/report/github.com/NexonSU/go-zabbix)
-[![GPL license](https://img.shields.io/badge/license-GPL-brightgreen.svg)](https://opensource.org/licenses/gpl-license)
-[![GoDoc](https://godoc.org/github.com/NexonSU/go-zabbix?status.svg)](https://godoc.org/github.com/NexonSU/go-zabbix)
-
-## Overview
-
-This project provides bindings to interoperate between programs written in Go
-language and the Zabbix monitoring API.
-
-A number of Zabbix API bindings already exist for Go with varying levels of
-maturity. This project aims to provide an alternative implementation which is
-stable, fast, and allows for loose typing (using types such as`interface{}` or
-`map[string]interface{}`) as well as strong types (such as `Host` or `Event`).
-
-The package aims to have comprehensive coverage of Zabbix API methods from v1.8
-through to v7.0 without introducing limitations to the native API methods.
-
-## Fork
-
-Currently maintained fork of https://github.com/zabbix-tools/go-zabbix
-
-New Features:
-
-* Support for Zabbix JSONRPC API 4.0 - 7.2
-* Support for host interfaces
-* More info on hosts
-* Support for proxies
-* Allow executing scripts on Zabbix Server
-
 ## Getting started
 
 Get the package:
