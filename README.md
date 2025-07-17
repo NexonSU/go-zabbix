@@ -101,4 +101,4 @@ make integration
 
 ## License
 
-Released under the [GNU GPL License](https://github.com/NexonSU/go-zabbix/blob/main/LICENSE)
+Released under the [GNU GPL License](https://github.com/NexonSU/go-zabbix?tab=GPL-2.0-1-ov-file)
